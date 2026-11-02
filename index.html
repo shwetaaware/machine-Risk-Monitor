@@ -1,79 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Machine Health System</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080f1c">
+<title>ForgeIQ | Machine Intelligence</title>
 <style>
-:root{--bg:#0b1220;--panel:#142238;--line:#2a3b52;--text:#edf4ff;--muted:#9aabc2;--blue:#65a9ff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1a3150,#0b1220 45%);color:var(--text);font:15px system-ui,sans-serif}
-main{width:min(1080px,calc(100% - 30px));margin:35px auto}header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
-small,.muted{color:var(--muted)}.eyebrow{color:var(--blue);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:bold}
-h1{font-size:clamp(24px,4vw,34px);margin:4px 0}h2{font-size:18px;margin:0 0 6px}.intro{color:var(--muted);line-height:1.6;max-width:720px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.panel{background:linear-gradient(180deg,#172840,#111d2e);border:1px solid var(--line);border-radius:17px;padding:22px;margin-top:18px;box-shadow:0 15px 40px #0002}
-.sub{color:var(--muted);font-size:13px;margin:0 0 18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-label{display:block;font-size:12px;font-weight:700;margin-bottom:7px;color:#cfdaea}.full{grid-column:1/-1}
-input{width:100%;padding:12px;background:#0b1626;color:white;border:1px solid #30445f;border-radius:9px;font:inherit}input:focus{outline:2px solid #65a9ff66;border-color:#65a9ff}
-.actions,.toolbar{display:flex;gap:10px;margin-top:17px}button{border:0;border-radius:9px;padding:11px 15px;font-weight:bold;cursor:pointer}
-.primary{background:#65a9ff;color:#071426}.secondary{background:#263a54;color:#e8f2ff}
-.result{min-height:220px;display:flex;flex-direction:column;justify-content:center}.placeholder,.empty{color:var(--muted);line-height:1.6}
-.status{display:inline-block;padding:7px 11px;border-radius:30px;font-size:12px;font-weight:800;width:max-content}
-.normal{background:#143b30;color:#82e3b8}.warning{background:#49391b;color:#ffda85}.high{background:#49252d;color:#ffa0a8}
-.big{font-size:34px;font-weight:850;margin:12px 0 3px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px}
-.metric,.report{background:#0b1727;border:1px solid #2a3b52;border-radius:10px;padding:12px}.metric span{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}.metric strong{font-size:17px}
-.issues{color:#ffda85;font-size:13px;line-height:1.8}.toolbar input{flex:1;min-width:0}.reports{display:grid;gap:9px;margin-top:12px}
-.report{display:flex;justify-content:space-between;align-items:center;gap:12px}.report strong{display:block;margin-bottom:5px;font-size:13px}.report small{line-height:1.5}
-.notice{margin-top:16px;padding:12px;border:1px solid #6b5425;background:#302818;color:#f6d99a;border-radius:10px;font-size:12px;line-height:1.5}
-footer{text-align:center;color:#75869d;font-size:11px;line-height:1.6;margin:25px}
-@media(max-width:740px){.grid{grid-template-columns:1fr}header{align-items:flex-start}.fields{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:17px}.metrics{gap:6px}.metric{padding:9px}.metric strong{font-size:14px}}
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--bg:#080f1c;--surface:#101c2c;--surface2:#142338;--line:#25384e;--text:#f1f6fc;--muted:#91a4b9;--cyan:#5ee1e8;--blue:#68aaff;--green:#58d6a0;--amber:#ffc66e;--red:#ff7184;--mono:'DM Mono',monospace;--sans:'Manrope',system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(#263c541a 1px,transparent 1px),linear-gradient(90deg,#263c541a 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 75%);z-index:-1}
+a{color:inherit;text-decoration:none}.shell{width:min(1220px,calc(100% - 44px));margin:auto}
+nav{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}
+.brand{display:flex;align-items:center;gap:12px}.brandmark{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#5ee1e8,#4086ef);display:grid;place-items:center;box-shadow:0 8px 28px #44c9dc33}
+.brandmark svg{width:25px}.brandname{font-size:15px;font-weight:800;letter-spacing:.08em}.brandname span{color:var(--cyan)}
+.navright{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:12px}.live{display:flex;align-items:center;gap:8px;border:1px solid #58d6a044;background:#58d6a012;color:var(--green);padding:9px 12px;border-radius:30px;font-family:var(--mono);font-size:10px;letter-spacing:.08em}.pulse{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 0 0 #58d6a088;animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px #58d6a000}100%{box-shadow:0 0 0 0 #58d6a000}}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:34px;padding:58px 0 38px;min-height:380px}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;gap:10px}.kicker:before{content:"";width:25px;height:1px;background:var(--cyan)}
+h1{font-size:clamp(36px,5.3vw,65px);line-height:1.04;letter-spacing:-.065em;margin:18px 0 16px;font-weight:800}h1 em{font-style:normal;color:var(--cyan)}
+.herotext{color:var(--muted);font-size:14px;line-height:1.85;max-width:510px}.heroactions{display:flex;gap:12px;margin-top:25px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:13px 17px;font:700 12px var(--sans);cursor:pointer;transition:.22s transform,.22s box-shadow,.22s background}.btn:hover{transform:translateY(-2px)}.btn-primary{background:linear-gradient(110deg,var(--cyan),#7daeff);color:#07131f;box-shadow:0 8px 24px #5ee1e82b}.btn-ghost{border:1px solid var(--line);background:#ffffff06;color:var(--text)}
+.heroart{position:relative;min-height:280px;display:grid;place-items:center}.orb{position:absolute;width:270px;height:270px;border-radius:50%;background:#40c8db12;filter:blur(32px);animation:float 6s ease-in-out infinite}
+.machine{position:relative;width:min(100%,440px);filter:drop-shadow(0 25px 40px #0008);animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.artlabel{position:absolute;border:1px solid #4ddbe044;background:#0d1b2bdc;backdrop-filter:blur(12px);padding:10px 13px;border-radius:10px;font:10px var(--mono);color:var(--cyan);box-shadow:0 10px 30px #0004}.artlabel.one{top:35px;right:0}.artlabel.two{bottom:28px;left:0}
+.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:20px 0 17px}.sectionhead h2{font-size:19px;letter-spacing:-.04em;margin:0}.sectionhead p{color:var(--muted);font-size:11px;margin:5px 0 0}
+.panel{background:linear-gradient(145deg,#14243aee,#0e1929ee);border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 45px #0002}
+.workspace{display:grid;grid-template-columns:1.02fr .98fr;gap:16px}.formpanel,.resultpanel{padding:23px}
+.paneltitle{font-size:14px;font-weight:800;margin:0}.paneldesc{font-size:11px;color:var(--muted);margin:6px 0 19px;line-height:1.6}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field.full{grid-column:1/-1}label{display:block;font-size:10px;font-weight:800;letter-spacing:.05em;color:#b6c6d8;margin-bottom:7px;text-transform:uppercase}
+input{width:100%;border:1px solid #2a405a;background:#091523;color:var(--text);border-radius:9px;padding:12px 13px;font:12px var(--sans);outline:none;transition:.2s}input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #5ee1e814}input::placeholder{color:#60758c}
+.fieldhint{font:9px var(--mono);color:#71869c;margin-top:6px}.formfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}.formfoot small{color:var(--muted);font-size:10px}
+.resultpanel{position:relative;overflow:hidden;min-height:355px}.resultpanel:after{content:"";position:absolute;width:210px;height:210px;border:1px solid #5ee1e80d;border-radius:50%;right:-80px;top:-90px;box-shadow:0 0 0 25px #5ee1e805,0 0 0 50px #5ee1e803;pointer-events:none}
+.resultempty{height:265px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}.radar{width:105px;height:105px;border:1px solid #5ee1e84d;border-radius:50%;margin:0 auto 15px;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#5ee1e81c,transparent 68%)}.radar:before,.radar:after{content:"";position:absolute;border:1px solid #5ee1e82b;border-radius:50%;inset:15px}.radar:after{inset:32px}.radar svg{width:35px;z-index:1;color:var(--cyan)}
+.statusrow{display:flex;align-items:center;justify-content:space-between;gap:12px}.status{font:10px var(--mono);letter-spacing:.1em;padding:8px 10px;border-radius:7px}.normal{color:var(--green);background:#58d6a015;border:1px solid #58d6a044}.warning{color:var(--amber);background:#ffc66e15;border:1px solid #ffc66e44}.high{color:var(--red);background:#ff718415;border:1px solid #ff718444}
+.score{font-size:44px;font-weight:800;letter-spacing:-.07em;margin:18px 0 0}.score span{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}.resultmachine{font-size:11px;color:var(--muted);margin-top:3px}.readings{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:20px 0}.reading{padding:11px;background:#091523;border:1px solid #26384e;border-radius:10px}.reading small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}.reading strong{font:16px var(--mono)}.reading i{font-style:normal;color:var(--cyan);font-size:10px}.issues{font-size:11px;color:var(--amber);line-height:1.8;padding-left:17px;margin:12px 0 0}.goodnote{color:var(--green);font-size:11px;margin:12px 0}
+.history{padding:22px;margin:18px 0 0}.historytop{display:flex;justify-content:space-between;align-items:center;gap:14px}.searchbox{display:flex;gap:8px;width:min(330px,55%)}.searchbox input{padding:10px 12px}.tablewrap{overflow-x:auto;margin-top:17px}table{border-collapse:collapse;width:100%;min-width:570px;text-align:left}th{font:9px var(--mono);letter-spacing:.1em;color:#8298af;padding:11px;border-bottom:1px solid var(--line)}td{padding:13px 11px;border-bottom:1px solid #ffffff0b;font-size:11px;color:#d4e0ec}tbody tr{transition:.2s}tbody tr:hover{background:#ffffff05}.machineid{font:10px var(--mono);color:var(--cyan)}.emptyrow{text-align:center;color:var(--muted);padding:25px}
+.footnote{display:flex;justify-content:space-between;gap:14px;padding:24px 0 35px;color:#71849a;font-size:10px}.footnote b{color:#a8bacd;font-weight:600}
+.toast{position:fixed;bottom:22px;right:22px;background:#172b40;border:1px solid #3c5c76;color:var(--text);padding:13px 16px;border-radius:10px;font-size:12px;box-shadow:0 12px 35px #0007;opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;z-index:5}.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:42px}.heroart{min-height:220px}.machine{max-width:360px}.workspace{grid-template-columns:1fr}.navright>span:not(.live){display:none}}
+@media(max-width:520px){.shell{width:calc(100% - 26px)}nav{height:68px}.hero{gap:10px;padding-bottom:20px}.heroart{min-height:190px}.machine{max-width:300px}.artlabel.one{right:0;top:5px}.artlabel.two{left:0;bottom:10px}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.formpanel,.resultpanel,.history{padding:17px}.historytop{align-items:flex-start;flex-direction:column}.searchbox{width:100%}.footnote{flex-direction:column}.sectionhead{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
-<body><main>
-<header><div><div class="eyebrow">Industrial monitoring</div><h1>⚙ Machine Health System</h1></div><span class="status normal">● SYSTEM READY</span></header>
-<p class="intro">Enter machine readings to assess its condition, identify warning indicators and save a health report. This demo follows the rule-based checks in the original Python project.</p>
-<div class="grid">
-<section class="panel"><h2>Analyse a machine</h2><p class="sub">Enter machine details and its latest operating readings.</p>
-<form id="form"><div class="fields">
-<div><label for="id">Machine ID</label><input id="id" required placeholder="e.g. MCH-001"></div>
-<div><label for="name">Machine name</label><input id="name" required placeholder="e.g. Industrial Pump"></div>
-<div><label for="temp">Temperature (°C)</label><input id="temp" type="number" min="0" step="any" required placeholder="e.g. 65"></div>
-<div><label for="vib">Vibration reading</label><input id="vib" type="number" min="0" step="any" required placeholder="e.g. 3.2"></div>
-<div class="full"><label for="rpm">Machine RPM</label><input id="rpm" type="number" min="0" step="1" required placeholder="e.g. 1500"></div>
-</div><div class="actions"><button class="primary">Analyse machine →</button><button class="secondary" type="reset">Clear form</button></div></form>
-<div class="notice">Original thresholds: temperature above 80°C, vibration above 5, or RPM equal to 0 each add one risk indicator.</div></section>
-<section class="panel"><h2>Machine health report</h2><p class="sub">Your latest analysis appears here.</p><div id="result" class="result"><div class="placeholder">No analysis yet. Enter readings and select Analyse machine.</div></div></section>
+<body>
+<div class="shell">
+<nav>
+ <a class="brand" href="#">
+  <span class="brandmark"><svg viewBox="0 0 24 24" fill="none" stroke="#07131f" stroke-width="2"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span>
+  <span class="brandname">FORGE<span>IQ</span></span>
+ </a>
+ <div class="navright"><span>INDUSTRIAL INTELLIGENCE</span><span class="live"><i class="pulse"></i> SYSTEM ONLINE</span></div>
+</nav>
+
+<section class="hero">
+ <div>
+  <div class="kicker">Predictive maintenance platform</div>
+  <h1>Know your machine.<br><em>Before it fails.</em></h1>
+  <p class="herotext">A smarter view of machine health. Monitor operating readings, identify early warning indicators and keep a clear record of every inspection.</p>
+  <div class="heroactions"><a class="btn btn-primary" href="#analyser">Start analysis&nbsp; ↘</a><a class="btn btn-ghost" href="#history">View reports&nbsp; ↓</a></div>
+ </div>
+ <div class="heroart">
+  <div class="orb"></div>
+  <svg class="machine" viewBox="0 0 500 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Illustration of an industrial motor">
+   <defs><linearGradient id="body" x1="95" y1="70" x2="375" y2="270" gradientUnits="userSpaceOnUse"><stop stop-color="#315979"/><stop offset=".48" stop-color="#18334d"/><stop offset="1" stop-color="#0c1b2c"/></linearGradient><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9bbbd0"/><stop offset=".5" stop-color="#41647f"/><stop offset="1" stop-color="#1b354c"/></linearGradient><linearGradient id="glow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#67edf0"/><stop offset="1" stop-color="#4d91ff"/></linearGradient><filter id="shadow"><feGaussianBlur stdDeviation="12"/></filter></defs>
+   <ellipse cx="250" cy="278" rx="185" ry="22" fill="#000" opacity=".45" filter="url(#shadow)"/>
+   <path d="M94 220h300v27H94z" fill="#18344d" stroke="#47718f"/><path d="M118 247h54v15h-54zm198 0h54v15h-54z" fill="#284a66" stroke="#60819a"/>
+   <path d="M132 107c0-18 15-33 33-33h174c18 0 33 15 33 33v111c0 18-15 33-33 33H165c-18 0-33-15-33-33V107Z" fill="url(#body)" stroke="#5a86a5" stroke-width="2"/>
+   <path d="M159 85v155m22-165v175m22-177v178m22-178v178m22-178v178m22-178v178m22-178v178m22-173v168" stroke="#6c9ab6" stroke-opacity=".45" stroke-width="5"/>
+   <ellipse cx="132" cy="162" rx="28" ry="61" fill="#10283d" stroke="#5b8cac" stroke-width="2"/><ellipse cx="132" cy="162" rx="16" ry="43" stroke="#6c9db9" stroke-width="3"/>
+   <path d="M372 126h28c14 0 25 11 25 25v22c0 14-11 25-25 25h-28z" fill="url(#metal)" stroke="#83a9c1" stroke-width="2"/><ellipse cx="425" cy="162" rx="12" ry="25" fill="#10243a" stroke="#7095ae" stroke-width="2"/>
+   <path d="M196 74V53h77v21" stroke="#5f8ba9" stroke-width="5"/><rect x="207" y="35" width="55" height="20" rx="5" fill="#1b3d59" stroke="#68a2c4"/><path d="M234 35V22" stroke="#6edce7" stroke-width="3"/>
+   <rect x="225" y="115" width="83" height="76" rx="9" fill="#0b1c2d" stroke="#3f6b8c"/><circle cx="266" cy="153" r="25" stroke="url(#glow)" stroke-width="2" stroke-dasharray="4 4"/><circle cx="266" cy="153" r="15" fill="#143b51" stroke="#68e4e8" stroke-width="2"/><path d="M266 141v12l10 7" stroke="#b7ffff" stroke-width="2" stroke-linecap="round"/>
+   <path d="M105 278h290" stroke="#5ee1e8" stroke-opacity=".55" stroke-width="2"/><path d="M125 286h250" stroke="#5ee1e8" stroke-opacity=".14" stroke-width="7" stroke-linecap="round"/>
+   <circle cx="100" cy="91" r="4" fill="#5ee1e8"><animate attributeName="opacity" values=".3;1;.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="390" cy="80" r="3" fill="#5ee1e8"><animate attributeName="opacity" values="1;.2;1" dur="2.6s" repeatCount="indefinite"/></circle>
+   <path d="M72 120h42M390 104h44M84 210h32" stroke="#5ee1e8" stroke-opacity=".55" stroke-dasharray="3 5"/>
+  </svg>
+  <div class="artlabel one">MOTOR UNIT&nbsp; / &nbsp;ACTIVE</div><div class="artlabel two">◈&nbsp; CONDITION MONITORING</div>
+ </div>
+</section>
+
+<div class="sectionhead" id="analyser"><div><h2>Machine diagnostics</h2><p>Run a condition check using the machine's latest readings.</p></div><div class="kicker">01 / ANALYSE</div></div>
+<section class="workspace">
+ <div class="panel formpanel">
+  <h3 class="paneltitle">Input parameters</h3><p class="paneldesc">Complete all fields to generate a machine health assessment.</p>
+  <form id="form"><div class="fields">
+   <div><label for="id">Machine identification</label><input id="id" required maxlength="40" placeholder="e.g. MCH-001"></div>
+   <div><label for="name">Machine name</label><input id="name" required maxlength="80" placeholder="e.g. Industrial Pump"></div>
+   <div><label for="temp">Temperature</label><input id="temp" type="number" min="0" step="any" required placeholder="e.g. 65"><div class="fieldhint">UNIT: °C</div></div>
+   <div><label for="vib">Vibration reading</label><input id="vib" type="number" min="0" step="any" required placeholder="e.g. 3.2"><div class="fieldhint">PROJECT INPUT SCALE</div></div>
+   <div class="field full"><label for="rpm">Rotational speed</label><input id="rpm" type="number" min="0" step="1" required placeholder="e.g. 1500"><div class="fieldhint">UNIT: REVOLUTIONS PER MINUTE (RPM)</div></div>
+  </div><div class="formfoot"><small>All readings must be zero or positive.</small><button class="btn btn-primary" type="submit">Run diagnostics&nbsp; ↗</button></div></form>
+ </div>
+ <div class="panel resultpanel">
+  <div class="statusrow"><h3 class="paneltitle">Assessment output</h3><span class="kicker">02 / RESULT</span></div>
+  <div id="result" class="resultempty"><div><div class="radar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4"/><circle cx="12" cy="12" r="7"/></svg></div>Awaiting machine readings.<br><span style="color:#60758c">Your diagnostic results will appear here.</span></div></div>
+ </div>
+</section>
+
+<div class="panel history" id="history">
+ <div class="historytop"><div><h3 class="paneltitle">Inspection history</h3><p class="paneldesc" style="margin:5px 0 0">Previously generated reports on this browser.</p></div><div class="searchbox"><input id="search" placeholder="Search machine ID..."><button class="btn btn-ghost" id="clear" type="button">Clear</button></div></div>
+ <div class="tablewrap"><table><thead><tr><th>MACHINE</th><th>DATE & TIME</th><th>TEMPERATURE</th><th>VIBRATION</th><th>RPM</th><th>STATUS</th></tr></thead><tbody id="reports"><tr><td colspan="6" class="emptyrow">No inspections recorded yet.</td></tr></tbody></table></div>
 </div>
-<section class="panel"><h2>Saved machine reports</h2><p class="sub">Reports saved in this browser on this device.</p>
-<div class="toolbar"><input id="search" placeholder="Search by Machine ID..."><button class="secondary" id="clear" type="button">Clear</button></div><div id="reports" class="reports"><div class="empty">No reports saved yet.</div></div></section>
-<footer>Machine Failure Prediction System · Rule-based demonstration<br>Calculations run in your browser. This is not a trained machine-learning model.</footer>
-</main>
+<footer class="footnote"><span><b>FORGEIQ</b> &nbsp; / &nbsp; MACHINE HEALTH MONITORING</span><span>RULE-BASED DEMONSTRATION &nbsp; · &nbsp; NOT A TRAINED ML MODEL</span></footer>
+</div>
+<div id="toast" class="toast">Report saved in this browser.</div>
 <script>
-const KEY="machineHealthReports_v1";
-const $=id=>document.getElementById(id);
-const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function getReports(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return []}}
-function render(){
- const q=$("search").value.trim().toUpperCase();
- const list=getReports().filter(r=>r.id.includes(q)).reverse();
- $("reports").innerHTML=list.length?list.map(r=>`<article class="report"><div><strong>${safe(r.name)} · ${safe(r.id)}</strong><small>${new Date(r.date).toLocaleString()}<br>${r.temp}°C · Vibration ${r.vib} · ${r.rpm} RPM</small></div><span class="status ${r.cls}">${r.status}</span></article>`).join(""):`<div class="empty">${q?"No reports found for this Machine ID.":"No reports saved yet."}</div>`;
+const KEY="machineHealthReports_v1";const $=id=>document.getElementById(id);
+function allReports(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return[]}}
+function safe(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function analyse(d){let score=0,w=[];if(d.temp>80){score++;w.push("High temperature")}if(d.vib>5){score++;w.push("High vibration")}if(d.rpm===0){score++;w.push("Machine is stopped")}let status=score===0?"NORMAL":score===1?"WARNING":"HIGH RISK";return{...d,score,w,status,date:new Date().toISOString()}}
+function show(r){
+ const cls=r.score===0?"normal":r.score===1?"warning":"high";
+ $("result").className="";$("result").innerHTML=`<div class="statusrow"><span class="status ${cls}">● &nbsp;${r.status}</span><span class="kicker">ASSESSMENT COMPLETE</span></div><div class="score">${r.score}<span> / 3 risk indicators</span></div><div class="resultmachine">${safe(r.name)} &nbsp;·&nbsp; ${safe(r.id)}</div><div class="readings"><div class="reading"><small>TEMPERATURE</small><strong>${r.temp}<i> °C</i></strong></div><div class="reading"><small>VIBRATION</small><strong>${r.vib}</strong></div><div class="reading"><small>ROTATIONAL SPEED</small><strong>${r.rpm}<i> RPM</i></strong></div></div>${r.w.length?`<ul class="issues">${r.w.map(x=>`<li>${x}</li>`).join("")}</ul>`:'<p class="goodnote">✓ No warning detected by the basic rules.</p>'}`;
 }
-$("form").addEventListener("submit",e=>{
- e.preventDefault();
- const id=$("id").value.trim().toUpperCase(),name=$("name").value.trim();
- const temp=Number($("temp").value),vib=Number($("vib").value),rpm=Number($("rpm").value);
- if(!id||!name||![temp,vib,rpm].every(Number.isFinite)||temp<0||vib<0||rpm<0||!Number.isInteger(rpm)){alert("Enter a machine ID, name and valid non-negative readings. RPM must be a whole number.");return}
- let score=0,warnings=[];
- if(temp>80){score++;warnings.push("High temperature")}
- if(vib>5){score++;warnings.push("High vibration")}
- if(rpm===0){score++;warnings.push("Machine is stopped")}
- const status=score===0?"NORMAL":score===1?"WARNING":"HIGH RISK";
- const cls=score===0?"normal":score===1?"warning":"high";
- const r={id,name,temp,vib,rpm,score,warnings,status,cls,date:new Date().toISOString()};
- const all=getReports();all.push(r);localStorage.setItem(KEY,JSON.stringify(all));
- $("result").innerHTML=`<span class="status ${cls}">● ${status}</span><div class="big">${score} <span class="muted">/ 3 risk indicators</span></div><div class="muted">${safe(name)} · ${safe(id)}</div><div class="metrics"><div class="metric"><span>Temperature</span><strong>${temp}°C</strong></div><div class="metric"><span>Vibration</span><strong>${vib}</strong></div><div class="metric"><span>RPM</span><strong>${rpm}</strong></div></div>${warnings.length?`<ul class="issues">${warnings.map(w=>`<li>${w}</li>`).join("")}</ul>`:'<p class="muted">No warning detected by the basic rules.</p>'}`;
- render();
-});
-$("search").addEventListener("input",render);
-$("clear").addEventListener("click",()=>{$("search").value="";render()});
-$("form").addEventListener("reset",()=>setTimeout(()=>$("result").innerHTML='<div class="placeholder">Form cleared. Enter new readings to generate a report.</div>',0));
+function render(){
+ const q=$("search").value.trim().toUpperCase();const rows=allReports().filter(r=>r.id.includes(q)).reverse();
+ $("reports").innerHTML=rows.length?rows.map(r=>{const cls=r.score===0?"normal":r.score===1?"warning":"high";return `<tr><td><span class="machineid">${safe(r.id)}</span><br>${safe(r.name)}</td><td>${new Date(r.date).toLocaleString()}</td><td>${r.temp} °C</td><td>${r.vib}</td><td>${r.rpm}</td><td><span class="status ${cls}">${r.status}</span></td></tr>`}).join(""):`<tr><td colspan="6" class="emptyrow">${q?"No matching machine reports.":"No inspections recorded yet."}</td></tr>`;
+}
+$("form").addEventListener("submit",e=>{e.preventDefault();const d={id:$("id").value.trim().toUpperCase(),name:$("name").value.trim(),temp:Number($("temp").value),vib:Number($("vib").value),rpm:Number($("rpm").value)};if(!d.id||!d.name||![d.temp,d.vib,d.rpm].every(Number.isFinite)||d.temp<0||d.vib<0||d.rpm<0||!Number.isInteger(d.rpm)){alert("Enter valid non-negative readings. RPM must be a whole number.");return}const r=analyse(d);const list=allReports();list.push(r);localStorage.setItem(KEY,JSON.stringify(list));show(r);render();$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)});
+$("search").addEventListener("input",render);$("clear").addEventListener("click",()=>{$("search").value="";render()});
+$("form").addEventListener("reset",()=>setTimeout(()=>$("result").innerHTML='<div class="resultempty"><div>Awaiting machine readings.<br><span style="color:#60758c">Your diagnostic results will appear here.</span></div></div>',0));
 render();
-</script></body></html>
+</script>
+</body></html>
