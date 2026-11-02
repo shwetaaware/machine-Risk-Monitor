@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Machine Health System</title>
+<style>
+:root{--bg:#0b1220;--panel:#142238;--line:#2a3b52;--text:#edf4ff;--muted:#9aabc2;--blue:#65a9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1a3150,#0b1220 45%);color:var(--text);font:15px system-ui,sans-serif}
+main{width:min(1080px,calc(100% - 30px));margin:35px auto}header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+small,.muted{color:var(--muted)}.eyebrow{color:var(--blue);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:bold}
+h1{font-size:clamp(24px,4vw,34px);margin:4px 0}h2{font-size:18px;margin:0 0 6px}.intro{color:var(--muted);line-height:1.6;max-width:720px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.panel{background:linear-gradient(180deg,#172840,#111d2e);border:1px solid var(--line);border-radius:17px;padding:22px;margin-top:18px;box-shadow:0 15px 40px #0002}
+.sub{color:var(--muted);font-size:13px;margin:0 0 18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:7px;color:#cfdaea}.full{grid-column:1/-1}
+input{width:100%;padding:12px;background:#0b1626;color:white;border:1px solid #30445f;border-radius:9px;font:inherit}input:focus{outline:2px solid #65a9ff66;border-color:#65a9ff}
+.actions,.toolbar{display:flex;gap:10px;margin-top:17px}button{border:0;border-radius:9px;padding:11px 15px;font-weight:bold;cursor:pointer}
+.primary{background:#65a9ff;color:#071426}.secondary{background:#263a54;color:#e8f2ff}
+.result{min-height:220px;display:flex;flex-direction:column;justify-content:center}.placeholder,.empty{color:var(--muted);line-height:1.6}
+.status{display:inline-block;padding:7px 11px;border-radius:30px;font-size:12px;font-weight:800;width:max-content}
+.normal{background:#143b30;color:#82e3b8}.warning{background:#49391b;color:#ffda85}.high{background:#49252d;color:#ffa0a8}
+.big{font-size:34px;font-weight:850;margin:12px 0 3px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:20px}
+.metric,.report{background:#0b1727;border:1px solid #2a3b52;border-radius:10px;padding:12px}.metric span{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}.metric strong{font-size:17px}
+.issues{color:#ffda85;font-size:13px;line-height:1.8}.toolbar input{flex:1;min-width:0}.reports{display:grid;gap:9px;margin-top:12px}
+.report{display:flex;justify-content:space-between;align-items:center;gap:12px}.report strong{display:block;margin-bottom:5px;font-size:13px}.report small{line-height:1.5}
+.notice{margin-top:16px;padding:12px;border:1px solid #6b5425;background:#302818;color:#f6d99a;border-radius:10px;font-size:12px;line-height:1.5}
+footer{text-align:center;color:#75869d;font-size:11px;line-height:1.6;margin:25px}
+@media(max-width:740px){.grid{grid-template-columns:1fr}header{align-items:flex-start}.fields{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:17px}.metrics{gap:6px}.metric{padding:9px}.metric strong{font-size:14px}}
+</style>
+</head>
+<body><main>
+<header><div><div class="eyebrow">Industrial monitoring</div><h1>⚙ Machine Health System</h1></div><span class="status normal">● SYSTEM READY</span></header>
+<p class="intro">Enter machine readings to assess its condition, identify warning indicators and save a health report. This demo follows the rule-based checks in the original Python project.</p>
+<div class="grid">
+<section class="panel"><h2>Analyse a machine</h2><p class="sub">Enter machine details and its latest operating readings.</p>
+<form id="form"><div class="fields">
+<div><label for="id">Machine ID</label><input id="id" required placeholder="e.g. MCH-001"></div>
+<div><label for="name">Machine name</label><input id="name" required placeholder="e.g. Industrial Pump"></div>
+<div><label for="temp">Temperature (°C)</label><input id="temp" type="number" min="0" step="any" required placeholder="e.g. 65"></div>
+<div><label for="vib">Vibration reading</label><input id="vib" type="number" min="0" step="any" required placeholder="e.g. 3.2"></div>
+<div class="full"><label for="rpm">Machine RPM</label><input id="rpm" type="number" min="0" step="1" required placeholder="e.g. 1500"></div>
+</div><div class="actions"><button class="primary">Analyse machine →</button><button class="secondary" type="reset">Clear form</button></div></form>
+<div class="notice">Original thresholds: temperature above 80°C, vibration above 5, or RPM equal to 0 each add one risk indicator.</div></section>
+<section class="panel"><h2>Machine health report</h2><p class="sub">Your latest analysis appears here.</p><div id="result" class="result"><div class="placeholder">No analysis yet. Enter readings and select Analyse machine.</div></div></section>
+</div>
+<section class="panel"><h2>Saved machine reports</h2><p class="sub">Reports saved in this browser on this device.</p>
+<div class="toolbar"><input id="search" placeholder="Search by Machine ID..."><button class="secondary" id="clear" type="button">Clear</button></div><div id="reports" class="reports"><div class="empty">No reports saved yet.</div></div></section>
+<footer>Machine Failure Prediction System · Rule-based demonstration<br>Calculations run in your browser. This is not a trained machine-learning model.</footer>
+</main>
+<script>
+const KEY="machineHealthReports_v1";
+const $=id=>document.getElementById(id);
+const safe=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function getReports(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch{return []}}
+function render(){
+ const q=$("search").value.trim().toUpperCase();
+ const list=getReports().filter(r=>r.id.includes(q)).reverse();
+ $("reports").innerHTML=list.length?list.map(r=>`<article class="report"><div><strong>${safe(r.name)} · ${safe(r.id)}</strong><small>${new Date(r.date).toLocaleString()}<br>${r.temp}°C · Vibration ${r.vib} · ${r.rpm} RPM</small></div><span class="status ${r.cls}">${r.status}</span></article>`).join(""):`<div class="empty">${q?"No reports found for this Machine ID.":"No reports saved yet."}</div>`;
+}
+$("form").addEventListener("submit",e=>{
+ e.preventDefault();
+ const id=$("id").value.trim().toUpperCase(),name=$("name").value.trim();
+ const temp=Number($("temp").value),vib=Number($("vib").value),rpm=Number($("rpm").value);
+ if(!id||!name||![temp,vib,rpm].every(Number.isFinite)||temp<0||vib<0||rpm<0||!Number.isInteger(rpm)){alert("Enter a machine ID, name and valid non-negative readings. RPM must be a whole number.");return}
+ let score=0,warnings=[];
+ if(temp>80){score++;warnings.push("High temperature")}
+ if(vib>5){score++;warnings.push("High vibration")}
+ if(rpm===0){score++;warnings.push("Machine is stopped")}
+ const status=score===0?"NORMAL":score===1?"WARNING":"HIGH RISK";
+ const cls=score===0?"normal":score===1?"warning":"high";
+ const r={id,name,temp,vib,rpm,score,warnings,status,cls,date:new Date().toISOString()};
+ const all=getReports();all.push(r);localStorage.setItem(KEY,JSON.stringify(all));
+ $("result").innerHTML=`<span class="status ${cls}">● ${status}</span><div class="big">${score} <span class="muted">/ 3 risk indicators</span></div><div class="muted">${safe(name)} · ${safe(id)}</div><div class="metrics"><div class="metric"><span>Temperature</span><strong>${temp}°C</strong></div><div class="metric"><span>Vibration</span><strong>${vib}</strong></div><div class="metric"><span>RPM</span><strong>${rpm}</strong></div></div>${warnings.length?`<ul class="issues">${warnings.map(w=>`<li>${w}</li>`).join("")}</ul>`:'<p class="muted">No warning detected by the basic rules.</p>'}`;
+ render();
+});
+$("search").addEventListener("input",render);
+$("clear").addEventListener("click",()=>{$("search").value="";render()});
+$("form").addEventListener("reset",()=>setTimeout(()=>$("result").innerHTML='<div class="placeholder">Form cleared. Enter new readings to generate a report.</div>',0));
+render();
+</script></body></html>
