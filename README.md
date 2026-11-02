@@ -19,7 +19,7 @@ Technologies Used
 How to Run
 1. Install Python 3.
 2. Download or clone this repository.
-3. Run `python main.py` in your terminal.
+3. Run `python itmain2.py` in your terminal.
 4. Follow the menu instructions.
 
  Important Note
